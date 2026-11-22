@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -27,10 +28,10 @@ export default function HomePage() {
     <main className="overflow-hidden">
       <header className="relative z-20 border-b border-white/10 bg-[var(--navy-deep)] text-white">
         <div className="site-container flex h-[76px] items-center justify-between gap-5">
-          <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AssetPass Marketplace home">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AssetPass Marketplace home">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--teal)] text-lg font-black">A</span>
             <span className="leading-tight"><span className="block text-[17px] font-extrabold tracking-tight">AssetPass</span><span className="block text-[9px] font-bold uppercase tracking-[.2em] text-teal-300">Marketplace</span></span>
-          </a>
+          </Link>
           <nav className="hidden items-center gap-8 text-[13px] font-medium text-slate-300 lg:flex" aria-label="Main navigation">
             <a className="transition hover:text-white" href="#categories">Explore</a>
             <a className="transition hover:text-white" href="#listings">Listings</a>
@@ -101,7 +102,7 @@ export default function HomePage() {
       <section id="services" className="bg-[var(--surface)] py-20 md:py-24">
         <div className="site-container">
           <div className="max-w-2xl"><p className="eyebrow">More than listings</p><h2 className="section-title mt-3">The services that move assets forward.</h2><p className="muted mt-4 text-sm leading-6">Find the people and capabilities that help you assess, maintain, move and manage assets with greater confidence.</p></div>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">{services.map(({ icon: Icon, title, text }) => <article key={title} className="rounded-2xl border border-[var(--line)] bg-white p-7 transition hover:-translate-y-1 hover:shadow-lg"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f6f3] text-[var(--teal-dark)]"><Icon size={22} /></span><h3 className="mt-6 text-lg font-bold text-[var(--navy)]">{title}</h3><p className="muted mt-3 text-sm leading-6">{text}</p><a href="/services" className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[var(--teal-dark)]">Explore services <ArrowUpRight size={14} /></a></article>)}</div>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">{services.map(({ icon: Icon, title, text }) => <article key={title} className="rounded-2xl border border-[var(--line)] bg-white p-7 transition hover:-translate-y-1 hover:shadow-lg"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f6f3] text-[var(--teal-dark)]"><Icon size={22} /></span><h3 className="mt-6 text-lg font-bold text-[var(--navy)]">{title}</h3><p className="muted mt-3 text-sm leading-6">{text}</p><Link href="/services" className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[var(--teal-dark)]">Explore services <ArrowUpRight size={14} /></Link></article>)}</div>
         </div>
       </section>
 
