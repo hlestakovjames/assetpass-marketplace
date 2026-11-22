@@ -38,8 +38,11 @@ npm run build
 - Participation overview, individual and organisation pathways, and getting-started guide.
 - Trust guidance for listing statuses, seller authority and reporting.
 - Account entry screens: `/account/sign-in` and `/account/register`.
+- Information pages: `/about`, `/help`, `/terms` and `/privacy`.
 
 The account screens are frontend previews only. They do not create accounts, authenticate users, send credentials, or connect to shared AssetPass authentication. Form submission displays a clear notice and does not transmit or store the entered details.
+
+The About and Help Centre pages describe the product's current purpose and preview status. Terms and Privacy are explicitly interim informational pages, not final legally reviewed documents. Final legal terms, privacy disclosures, data-controller contact details and operational support processes must be approved before live services or personal-data processing begin.
 
 ## Important implementation boundaries
 
