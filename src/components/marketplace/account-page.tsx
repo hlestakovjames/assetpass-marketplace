@@ -12,6 +12,13 @@ export function AccountPage({ mode }: { mode: AccountMode }) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isRegister) {
+      const formData = new FormData(event.currentTarget);
+      if (formData.get("password") !== formData.get("confirmPassword")) {
+        setNotice("The passwords do not match. Please check both password fields.");
+        return;
+      }
+    }
     setNotice(
       "Account services are not connected yet. This is a frontend preview; your details have not been sent, saved or processed."
     );
