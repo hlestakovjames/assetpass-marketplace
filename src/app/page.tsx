@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarketplaceBrand } from "@/components/marketplace/marketplace-brand";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -28,10 +29,7 @@ export default function HomePage() {
     <main className="overflow-hidden">
       <header className="relative z-20 border-b border-white/10 bg-[var(--navy-deep)] text-white">
         <div className="site-container flex h-[76px] items-center justify-between gap-5">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="AssetPass Marketplace home">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--teal)] text-lg font-black">A</span>
-            <span className="leading-tight"><span className="block text-[17px] font-extrabold tracking-tight">AssetPass</span><span className="block text-[9px] font-bold uppercase tracking-[.2em] text-teal-300">Marketplace</span></span>
-          </Link>
+          <MarketplaceBrand />
           <nav className="hidden items-center gap-8 text-[13px] font-medium text-slate-300 lg:flex" aria-label="Main navigation">
             <a className="transition hover:text-white" href="#categories">Explore</a>
             <a className="transition hover:text-white" href="#listings">Listings</a>

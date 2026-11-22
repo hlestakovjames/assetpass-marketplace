@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description:
     "Explore asset opportunities, services and trusted providers across the AssetPass Marketplace.",
   applicationName: "AssetPass Marketplace",
+  icons: { icon: [{ url: "/brand/Assetpass%20Marketplace%20icon.png", type: "image/png" }] },
 };
 
 export default function RootLayout({

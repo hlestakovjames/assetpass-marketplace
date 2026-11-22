@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MarketplaceBrand } from "@/components/marketplace/marketplace-brand";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Building2, CheckCircle2, ShieldCheck, UserRound } from "lucide-react";
 
@@ -30,10 +31,7 @@ export function AccountPage({ mode }: { mode: AccountMode }) {
         <aside className="relative hidden overflow-hidden bg-[var(--navy-deep)] px-12 py-10 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="pointer-events-none absolute -right-36 top-1/4 h-[480px] w-[480px] rounded-full border border-white/[.08]" />
           <div className="pointer-events-none absolute -right-16 top-1/3 h-[320px] w-[320px] rounded-full border border-white/[.08]" />
-          <Link href="/" className="relative flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--teal)] text-xl font-black">A</span>
-            <span><span className="block text-lg font-extrabold">AssetPass</span><span className="block text-[10px] font-bold uppercase tracking-[.2em] text-teal-300">Marketplace</span></span>
-          </Link>
+          <MarketplaceBrand />
           <div className="relative max-w-lg pb-16">
             <span className="inline-flex items-center gap-2 rounded-full border border-teal-300/20 bg-teal-300/10 px-3 py-2 text-[11px] font-semibold text-teal-100"><ShieldCheck size={14}/> Discover with confidence</span>
             <h1 className="mt-7 text-5xl font-extrabold leading-[1.08] tracking-[-.05em]">A better way to connect around asset value.</h1>
