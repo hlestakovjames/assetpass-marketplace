@@ -36,11 +36,12 @@ export default function HomePage() {
             <a className="transition hover:text-white" href="#listings">Listings</a>
             <a className="transition hover:text-white" href="#services">Services</a>
             <a className="transition hover:text-white" href="/providers">Providers</a>
+            <a className="transition hover:text-white" href="/participate">Participate</a>
             <a className="transition hover:text-white" href="#how-it-works">How it works</a>
           </nav>
           <div className="flex items-center gap-2">
             <a href="/account/sign-in" className="hidden rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10 sm:inline-flex">Sign in</a>
-            <a href="/account/register" className="inline-flex items-center gap-2 rounded-lg bg-[var(--teal)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b8178]">Join Marketplace <ArrowUpRight size={15} /></a>
+            <a href="/participate" className="inline-flex items-center gap-2 rounded-lg bg-[var(--teal)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b8178]">Join Marketplace <ArrowUpRight size={15} /></a>
           </div>
         </div>
       </header>
@@ -118,7 +119,7 @@ export default function HomePage() {
       <section className="bg-[var(--navy)] py-16 text-white">
         <div className="site-container flex flex-col items-start justify-between gap-7 md:flex-row md:items-center">
           <div><p className="text-[11px] font-bold uppercase tracking-[.16em] text-teal-300">Ready to take part?</p><h2 className="mt-3 text-3xl font-extrabold tracking-tight">Your next opportunity starts here.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-slate-300">Join the AssetPass Marketplace community and get ready to connect.</p></div>
-          <a href="/account/register" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[var(--teal)] px-6 py-4 text-sm font-bold text-white hover:bg-[var(--teal-dark)]">Get started <ArrowRight size={17} /></a>
+          <a href="/participate" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[var(--teal)] px-6 py-4 text-sm font-bold text-white hover:bg-[var(--teal-dark)]">Get started <ArrowRight size={17} /></a>
         </div>
       </section>
 
