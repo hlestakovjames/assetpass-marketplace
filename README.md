@@ -4,7 +4,7 @@ Standalone Marketplace frontend for the AssetPass ecosystem.
 
 ## Current foundation
 
-This repository starts the dedicated Marketplace experience as a mobile-first Next.js application. The initial homepage introduces public discovery across asset listings, services and providers, with a search entry point, category navigation, featured demonstration cards, trust messaging and participant calls to action.
+This repository provides a dedicated, mobile-first Next.js Marketplace experience for public discovery across asset listings, services and providers, with category navigation, search, trust guidance and participant pathways.
 
 ## Stack
 
@@ -31,6 +31,16 @@ npm run lint
 npm run build
 ```
 
+## Routes in this phase
+
+- Marketplace homepage, search, category directory/details and listing details.
+- Service directory/details and provider directory/profiles.
+- Participation overview, individual and organisation pathways, and getting-started guide.
+- Trust guidance for listing statuses, seller authority and reporting.
+- Account entry screens: `/account/sign-in` and `/account/register`.
+
+The account screens are frontend previews only. They do not create accounts, authenticate users, send credentials, or connect to shared AssetPass authentication. Form submission displays a clear notice and does not transmit or store the entered details.
+
 ## Important implementation boundaries
 
 This is a frontend foundation only. It is not integrated with the AssetPass backend, shared authentication, database, payments, or other AssetPass applications.
@@ -48,10 +58,6 @@ A listing is an offer to transact, not the asset record. A listing or accepted o
 ## Demonstration data
 
 Featured cards are illustrative UI examples only. They are not live AssetPass records, verified sellers, available inventory or current offers. Replace them with API-backed data only after the relevant backend contracts and integration plan are approved.
-
-## Routes in this phase
-
-Implemented frontend routes include the homepage, search, category directory/details, listing details, service directory/details, provider directory/profiles, and participation overview with individual and organisation pathways, a participant getting-started guide, and trust guidance covering listing statuses, seller authority, and moderation/reporting principles. Account registration, authentication, participant verification, enquiries and transactions remain future work.
 
 ## Integration preparation
 
