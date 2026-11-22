@@ -51,7 +51,7 @@ Featured cards are illustrative UI examples only. They are not live AssetPass re
 
 ## Routes in this phase
 
-Implemented frontend routes include the homepage, search, category directory/details, listing details, service directory/details, provider directory/profiles, and participation overview with individual and organisation pathways, and trust guidance covering listing statuses, seller authority, and moderation/reporting principles. Account registration, authentication, participant verification, enquiries and transactions remain future work.
+Implemented frontend routes include the homepage, search, category directory/details, listing details, service directory/details, provider directory/profiles, and participation overview with individual and organisation pathways, a participant getting-started guide, and trust guidance covering listing statuses, seller authority, and moderation/reporting principles. Account registration, authentication, participant verification, enquiries and transactions remain future work.
 
 ## Deployment
 
