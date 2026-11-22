@@ -227,3 +227,31 @@ The following require explicit agreement from the relevant platform owners:
 - legal/compliance approval for any escrow, custody of funds or regulated settlement service.
 
 **Implementation gate:** until these decisions are approved and a separate integration task is authorized, the Marketplace remains a frontend-only experience with demonstration content. This document is preparation, not a claim of completed integration.
+
+
+## 11. Current frontend route and content status
+
+The standalone frontend currently includes these route groups. This inventory describes the UI surface only; it does not imply that the corresponding backend capability or protected workflow is implemented.
+
+| Route group | Routes | Current behavior / status |
+|---|---|---|
+| Public discovery | `/`, `/search`, `/categories`, `/categories/[slug]`, `/listings/[id]` | Public discovery experience; listing content is illustrative until connected to approved Marketplace read contracts |
+| Services and providers | `/services`, `/services/[slug]`, `/providers`, `/providers/[slug]` | Discovery UI and demonstration content; no live provider verification or service booking |
+| Participation | `/participate`, `/participate/individuals`, `/participate/organisations`, `/participate/getting-started` | Explains intended participant pathways; no live onboarding or organisation-authority checks |
+| Trust guidance | `/trust`, `/trust/listing-statuses`, `/trust/reporting`, `/trust/seller-authority` | Informational guidance; reporting and moderation submissions are not connected |
+| Account entry | `/account/sign-in`, `/account/register` | Frontend-only form previews; they do not authenticate, create accounts, send credentials, persist submitted details or connect to shared AssetPass identity |
+| Marketplace information | `/about`, `/help`, `/terms`, `/privacy` | Informational pages describing the product, current preview and intended safeguards |
+
+### Account entry constraints
+
+The sign-in and registration pages exist to complete the navigation and demonstrate the proposed user experience. Their forms are not an authentication implementation. A submit action displays a preview notice; no credential or registration payload is transmitted or stored. Do not configure them as production sign-in or onboarding until the shared identity/authentication contract, account lifecycle, verification, authorization and session behavior have been approved and separately implemented.
+
+### Terms and privacy content status
+
+The About and Help Centre pages are product guidance for the current preview. The Terms page is an interim explanation of intended use and domain boundaries, not a binding or legally reviewed Terms of Use. The Privacy page is an interim transparency statement, not a final privacy notice. Before live account creation or personal-data processing begins, the responsible data controller, contact details, purposes and lawful bases, data categories, recipients/processors, retention periods, user-rights procedures, security disclosures and applicable legal terms must be confirmed and reviewed by the appropriate legal/privacy owners. Do not interpret the current pages as evidence that those operational or legal arrangements are already in place.
+
+### Frontend quality and implementation notes
+
+The Marketplace uses the Next.js App Router, React, TypeScript and Tailwind CSS. ESLint is configured with the ESLint 9 flat-config format and the Next.js Core Web Vitals/TypeScript presets. Turbopack's root is explicitly scoped to the Marketplace project to avoid treating a parent-directory lockfile as the application root. These are frontend tooling settings only and do not change the integration boundary.
+
+**Status rule:** all route groups above remain frontend-only until their relevant contracts are approved, implementation is separately authorized, and the owning domains provide working services. The existence of a route, button, form or page is not evidence that an API, account, transaction, report or legal process is operational.
