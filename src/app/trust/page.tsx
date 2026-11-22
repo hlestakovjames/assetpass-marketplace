@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, ClipboardCheck, FileSearch, Flag, ShieldCheck } from "lucide-react";
+import { ArrowRight, ClipboardCheck, FileSearch, Flag, ShieldCheck } from "lucide-react";
 
 const topics = [
   { href: "/trust/listing-statuses", icon: ClipboardCheck, title: "Listing statuses", text: "Understand the difference between a draft, a reviewed publication, a suspended listing and a withdrawn offer." },
