@@ -35,6 +35,7 @@ export default function HomePage() {
             <a className="transition hover:text-white" href="#categories">Explore</a>
             <a className="transition hover:text-white" href="#listings">Listings</a>
             <a className="transition hover:text-white" href="#services">Services</a>
+            <a className="transition hover:text-white" href="/providers">Providers</a>
             <a className="transition hover:text-white" href="#how-it-works">How it works</a>
           </nav>
           <div className="flex items-center gap-2">
