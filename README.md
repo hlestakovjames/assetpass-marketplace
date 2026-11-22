@@ -1,48 +1,58 @@
 # AssetPass Marketplace
 
-The standalone Marketplace experience for the AssetPass ecosystem.
+Standalone Marketplace frontend for the AssetPass ecosystem.
 
-## Purpose
+## Current foundation
 
-AssetPass Marketplace is a multi-sided marketplace for discovering and engaging with asset listings, services, sellers, and providers. It supports public discovery and, in later phases, authenticated participant journeys for individuals and organisations.
+This repository starts the dedicated Marketplace experience as a mobile-first Next.js application. The initial homepage introduces public discovery across asset listings, services and providers, with a search entry point, category navigation, featured demonstration cards, trust messaging and participant calls to action.
 
-This repository owns the Marketplace frontend experience. It does not own canonical asset identity, legal ownership, custody, payment settlement, agreements, fulfilment, or organisation authority.
-
-## Architecture boundaries
-
-- **Marketplace:** listing presentation and lifecycle, discovery, enquiries, offers, and transaction coordination.
-- **Asset domain:** canonical asset identity, legal ownership, custody, and lifecycle.
-- **Financial domain:** payment records and provider interactions.
-- **Agreement domain:** agreements and their authoritative status.
-- **Fulfilment domain:** delivery and handover progress.
-- **Organisation governance:** authority for users acting on behalf of organisations.
-- **Platform Administration:** moderation, policy, oversight, and platform analytics.
-
-A listing is an offer to transact, not an asset record. A listing or accepted offer does not itself transfer ownership or custody. Payment status is not proof of asset transfer. The Marketplace must not directly mutate asset ownership or custody records.
-
-## Current phase
-
-The initial foundation is intentionally frontend-only and uses clearly labelled demonstration content. No backend integration, shared authentication/session, database access, payment provider, or ownership/custody operation is configured in this phase.
-
-## Planned stack
+## Stack
 
 - Next.js App Router
-- React
+- React 19
 - TypeScript
-- Tailwind CSS
-- Responsive, mobile-first interface
+- Tailwind CSS 4
+- Lucide icons
 
-## Local development
-
-Install dependencies and start the development server:
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-The app is expected to run at http://localhost:3000.
+Open http://localhost:3000.
 
-## Domain and deployment
+Quality checks:
 
-No custom production domain is configured. The eventual deployment URL and any custom domain will be confirmed separately.
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+## Important implementation boundaries
+
+This is a frontend foundation only. It is not integrated with the AssetPass backend, shared authentication, database, payments, or other AssetPass applications.
+
+- Marketplace owns listing presentation and, in the target architecture, listing lifecycle, discovery, enquiries, offers and transaction coordination.
+- The Asset domain remains authoritative for canonical asset identity, legal ownership, custody and lifecycle.
+- Financial services own payment records and provider interactions.
+- Agreements own agreement records and status.
+- Fulfilment owns delivery and handover progress.
+- Organisation governance determines whether a participant has authority to act for an organisation.
+- Platform Administration owns Marketplace moderation, policy, oversight and analytics.
+
+A listing is an offer to transact, not the asset record. A listing or accepted offer does not itself transfer ownership or custody. Payment status is not proof of asset transfer. The Marketplace frontend must never independently imply or perform a canonical ownership/custody transfer.
+
+## Demonstration data
+
+Featured cards are illustrative UI examples only. They are not live AssetPass records, verified sellers, available inventory or current offers. Replace them with API-backed data only after the relevant backend contracts and integration plan are approved.
+
+## Routes in this phase
+
+The homepage and its visual entry points are in place. Search, category, listing, service, participant, enquiry and account destinations are intentionally future work; no placeholder route should be mistaken for an implemented workflow.
+
+## Deployment
+
+No production API URL, shared auth configuration, or custom domain is set. Deployment target and domain configuration will be handled in a later, explicitly approved phase.
