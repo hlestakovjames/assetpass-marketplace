@@ -37,6 +37,7 @@ export default function HomePage() {
             <a className="transition hover:text-white" href="#services">Services</a>
             <a className="transition hover:text-white" href="/providers">Providers</a>
             <a className="transition hover:text-white" href="/participate">Participate</a>
+            <a className="transition hover:text-white" href="/trust">Trust &amp; Safety</a>
             <a className="transition hover:text-white" href="#how-it-works">How it works</a>
           </nav>
           <div className="flex items-center gap-2">
@@ -126,7 +127,7 @@ export default function HomePage() {
       <footer className="bg-[#081726] py-10 text-slate-400">
         <div className="site-container flex flex-col justify-between gap-7 md:flex-row md:items-center">
           <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--teal)] font-black text-white">A</span><div><p className="text-sm font-bold text-white">AssetPass Marketplace</p><p className="text-[10px]">Discover value. Connect with confidence.</p></div></div>
-          <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs"><a href="/about" className="hover:text-white">About</a><a href="/help" className="hover:text-white">Help centre</a><a href="/terms" className="hover:text-white">Terms</a><a href="/privacy" className="hover:text-white">Privacy</a><a href="https://assetpass.vercel.app" className="hover:text-white">AssetPass website</a></div>
+          <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs"><a href="/about" className="hover:text-white">About</a><a href="/help" className="hover:text-white">Help centre</a><a href="/trust" className="hover:text-white">Trust &amp; Safety</a><a href="/terms" className="hover:text-white">Terms</a><a href="/privacy" className="hover:text-white">Privacy</a><a href="https://assetpass.vercel.app" className="hover:text-white">AssetPass website</a></div>
           <p className="text-[10px]">© {new Date().getFullYear()} AssetPass. All rights reserved.</p>
         </div>
       </footer>
