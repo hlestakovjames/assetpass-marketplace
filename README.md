@@ -51,7 +51,7 @@ Featured cards are illustrative UI examples only. They are not live AssetPass re
 
 ## Routes in this phase
 
-The homepage and its visual entry points are in place. Search, category, listing, service, participant, enquiry and account destinations are intentionally future work; no placeholder route should be mistaken for an implemented workflow.
+Implemented frontend routes include the homepage, search, category directory/details, listing details, service directory/details, provider directory/profiles, and participation overview with individual and organisation pathways. Account registration, authentication, participant verification, enquiries and transactions remain future work.
 
 ## Deployment
 
