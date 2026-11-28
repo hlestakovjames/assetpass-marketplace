@@ -3,7 +3,7 @@ import { AccountPage } from "@/components/marketplace/account-page";
 
 export const metadata: Metadata = {
   title: "Join Marketplace | AssetPass Marketplace",
-  description: "Registration preview for AssetPass Marketplace.",
+  description: "Create your AssetPass identity through the canonical App registration journey.",
 };
 
 export default function RegisterPage() {

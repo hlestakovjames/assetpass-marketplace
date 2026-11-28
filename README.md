@@ -18,10 +18,10 @@ This repository provides a dedicated, mobile-first Next.js Marketplace experienc
 
 ```bash
 npm install
-npm run dev
+npm run dev -- -p 3002
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3002.
 
 Quality checks:
 
@@ -37,16 +37,16 @@ npm run build
 - Service directory/details and provider directory/profiles.
 - Participation overview, individual and organisation pathways, and getting-started guide.
 - Trust guidance for listing statuses, seller authority and reporting.
-- Account entry screens: `/account/sign-in` and `/account/register`.
+- Shared identity account routes: `/account/sign-in`, `/account/register`, `/account`, `/account/security`, `/account/forgot-password` and `/reset-password`.
 - Information pages: `/about`, `/help`, `/terms` and `/privacy`.
 
-The account screens are frontend previews only. They do not create accounts, authenticate users, send credentials, or connect to shared AssetPass authentication. Form submission displays a clear notice and does not transmit or store the entered details.
+Marketplace sign-in and session restoration now use the shared AssetPass backend identity contract through the same-origin BFF. The authenticated Marketplace account uses its own host-only session for the same central AssetPass identity. Registration redirects to the canonical AssetPass App registration journey; Marketplace does not maintain a reduced duplicate registration form. Public discovery remains available without signing in. Forgot-password, reset-password and signed-in password-change UI are present and are being validated against the shared backend implementation.
 
 The About and Help Centre pages describe the product's current purpose and preview status. Terms and Privacy are explicitly interim informational pages, not final legally reviewed documents. Final legal terms, privacy disclosures, data-controller contact details and operational support processes must be approved before live services or personal-data processing begin.
 
 ## Important implementation boundaries
 
-This is a frontend foundation only. It is not integrated with the AssetPass backend, shared authentication, database, payments, or other AssetPass applications.
+This is a frontend foundation with Phase 1 shared authentication integration in progress. Marketplace listing, transaction, payment, agreement, fulfilment and canonical asset integrations remain unimplemented.
 
 - Marketplace owns listing presentation and, in the target architecture, listing lifecycle, discovery, enquiries, offers and transaction coordination.
 - The Asset domain remains authoritative for canonical asset identity, legal ownership, custody and lifecycle.
@@ -64,8 +64,8 @@ Featured cards are illustrative UI examples only. They are not live AssetPass re
 
 ## Integration preparation
 
-The frontend/backend boundary, domain ownership, public/private data rules, identity and organisation authority expectations, conceptual API contract surface, error states, mock-fixture plan, and proposed future integration sequence are documented in [Marketplace frontend integration preparation](docs/integration/marketplace-frontend-contracts.md). This is documentation only: no API, shared authentication, database, payment, transaction, or ownership/custody integration is implemented or authorized in this phase. A separate approval is required before integration begins.
+The frontend/backend boundary, domain ownership, public/private data rules, identity and organisation authority expectations, conceptual API contract surface, error states, mock-fixture plan, and proposed future integration sequence are documented in [Marketplace frontend integration preparation](docs/integration/marketplace-frontend-contracts.md). The document remains authoritative for Marketplace domain integrations. Phase 1 shared authentication is separately approved and described in the authentication section of this contract. Listing, transaction, payment and ownership/custody integration still require their own approved contracts and implementation work.
 
 ## Deployment
 
-No production API URL, shared auth configuration, or custom domain is set. Deployment target and domain configuration will be handled in a later, explicitly approved phase.
+For each deployment, configure server-only `ASSET_PASS_BACKEND_ORIGIN` and `ASSET_PASS_PUBLIC_ORIGIN`, plus `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN` for the canonical registration link. The backend `TRUSTED_ORIGINS` must include the exact Marketplace origin. Do not hardcode a future custom domain.
