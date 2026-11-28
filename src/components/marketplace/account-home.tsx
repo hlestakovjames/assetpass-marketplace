@@ -1,18 +1,55 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "@/features/authentication/auth-provider";
+import { optInMarketplace, revokeMarketplace } from "@/features/authentication/auth-client";
 
 export function AccountHome() {
   const router = useRouter();
   const { user, status, logout, retrySessionRestore } = useAuth();
+  const [busy, setBusy] = useState(false);
+  const [acknowledgement, setAcknowledgement] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (status === "unauthenticated") router.replace("/account/sign-in");
   }, [status, router]);
+
+  async function handleMarketplaceOptIn() {
+    if (!acknowledgement) {
+      setError("Confirm the Marketplace participation acknowledgement before continuing.");
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      await optInMarketplace();
+      setAcknowledgement(false);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to activate Marketplace participation.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleMarketplaceRevoke() {
+    const confirmed = window.confirm(
+      "Turn off your individual Marketplace participation? Your AssetPass identity and App access will remain unchanged.",
+    );
+    if (!confirmed) return;
+    setBusy(true);
+    setError("");
+    try {
+      await revokeMarketplace("Individual opted out from Marketplace account settings.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to turn off Marketplace participation.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function handleLogout() {
     await logout();
@@ -55,6 +92,68 @@ export function AccountHome() {
               <p className="mt-2 flex items-center gap-1 text-xs font-semibold text-[var(--teal-dark)]">Manage security <ArrowRight size={13} className="transition group-hover:translate-x-1"/></p>
             </Link>
           </div>
+          {error && <p role="alert" className="mt-5 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
+          <section className="mt-7 rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 className="text-base font-bold text-[var(--navy)]">Individual Marketplace participation</h2>
+                <p className="muted mt-1 max-w-xl text-sm leading-6">
+                  Sign-in authenticates your central AssetPass identity. Explicit Marketplace opt-in enables individual participant features; it does not authorize organisation representation or asset listing/sale.
+                </p>
+              </div>
+              <span className={user.applicationEntitlements?.marketplace?.active
+                ? "rounded-full bg-[#eaf7f3] px-3 py-1 text-xs font-bold text-[var(--teal-dark)]"
+                : "rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600"}>
+                {user.applicationEntitlements?.marketplace?.active ? "Active" : "Not enabled"}
+              </span>
+            </div>
+            {user.applicationEntitlements?.marketplace?.active ? (
+              <button
+                type="button"
+                onClick={() => void handleMarketplaceRevoke()}
+                disabled={busy}
+                className="mt-4 min-h-11 rounded-xl border border-rose-200 bg-white px-4 text-sm font-semibold text-rose-700 hover:bg-rose-50 disabled:opacity-60"
+              >
+                {busy ? "Please wait…" : "Turn off individual Marketplace access"}
+              </button>
+            ) : (
+              <div className="mt-4">
+                <label className="flex items-start gap-3 text-sm leading-6 text-[var(--ink)]">
+                  <input
+                    type="checkbox"
+                    checked={acknowledgement}
+                    onChange={(event) => setAcknowledgement(event.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-slate-300"
+                  />
+                  <span>
+                    I understand that Marketplace participation is separate from App access and does not by itself authorize me to act for an organisation or to list, sell, own or take custody of an asset.
+                  </span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => void handleMarketplaceOptIn()}
+                  disabled={busy || !acknowledgement}
+                  className="mt-4 min-h-11 rounded-xl bg-[var(--teal)] px-5 text-sm font-bold text-white hover:bg-[var(--teal-dark)] disabled:opacity-50"
+                >
+                  {busy ? "Activating…" : "Opt in to Marketplace"}
+                </button>
+              </div>
+            )}
+            {(user.marketplaceOrganizationRepresentations?.length ?? 0) > 0 && (
+              <div className="mt-5 border-t border-[var(--line)] pt-4">
+                <h3 className="text-sm font-bold text-[var(--navy)]">Organisation representation</h3>
+                <ul className="mt-2 space-y-2">
+                  {user.marketplaceOrganizationRepresentations?.map((representation) => (
+                    <li key={representation.grantId} className="rounded-xl bg-white p-3 text-sm">
+                      <span className="font-semibold text-[var(--ink)]">{representation.displayName}</span>
+                      <span className="ml-2 text-xs text-[var(--muted)]">Authorised representative</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6">
             <Link href="/" className="text-sm font-semibold text-[var(--teal-dark)] hover:underline">Continue exploring Marketplace</Link>
             <button onClick={() => void handleLogout()} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-rose-200 px-4 text-sm font-semibold text-rose-700 hover:bg-rose-50"><LogOut size={15}/> Sign out</button>

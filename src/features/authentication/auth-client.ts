@@ -3,6 +3,18 @@ export type AuthenticatedUser = {
   fullName: string;
   email: string;
   status: string;
+  applicationEntitlements?: {
+    assetpassApp: { active: boolean; grantedAt: string | null };
+    marketplace: { active: boolean; grantedAt: string | null };
+  };
+  marketplaceOrganizationRepresentations?: Array<{
+    grantId: string;
+    organizationId: string;
+    displayName: string;
+    effectiveAt: string;
+    expiresAt: string | null;
+    authorityBasis: string;
+  }>;
   profile?: unknown;
   platformRoles?: string[];
   platformPermissions?: string[];
@@ -176,10 +188,16 @@ export async function restoreSession(): Promise<AuthenticatedUser | null> {
 
 export async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const method = (init.method ?? "GET").toUpperCase();
+  const csrfRequired = ["POST", "PUT", "PATCH", "DELETE"].includes(method);
+  const requestCsrfToken = csrfRequired
+    ? csrfToken ?? (await bootstrapCsrfToken())
+    : null;
   const makeRequest = (token: string | null) => {
     const headers = new Headers(init.headers);
     headers.set("Accept", "application/json");
     if (token) headers.set("Authorization", `Bearer ${token}`);
+    if (requestCsrfToken) headers.set("X-CSRF-Token", requestCsrfToken);
     return fetch(`${API_BASE_URL}${normalizedPath}`, {
       ...init,
       headers,
@@ -195,6 +213,33 @@ export async function apiFetch(path: string, init: RequestInit = {}): Promise<Re
   return response;
 }
 
+
+
+export async function optInMarketplace(): Promise<void> {
+  const response = await apiFetch("/auth/application-entitlements/marketplace/opt-in", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ acknowledgementAccepted: true }),
+  });
+  const payload = await readPayload<{ message?: unknown }>(response);
+  if (!response.ok) {
+    throw new Error(errorMessage(payload, "Unable to activate Marketplace participation."));
+  }
+  await restoreSession();
+}
+
+export async function revokeMarketplace(reason: string): Promise<void> {
+  const response = await apiFetch("/auth/application-entitlements/marketplace/revoke", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reason }),
+  });
+  const payload = await readPayload<{ message?: unknown }>(response);
+  if (!response.ok) {
+    throw new Error(errorMessage(payload, "Unable to revoke Marketplace participation."));
+  }
+  await restoreSession();
+}
 
 export async function requestPasswordReset(email: string): Promise<{ message: string }> {
   const response = await fetch(`${API_BASE_URL}/auth/password-reset/request`, {
