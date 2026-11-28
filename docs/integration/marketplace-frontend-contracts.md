@@ -190,7 +190,7 @@ Integration is a separate future authorization and should proceed in reviewed in
 1. **Contract alignment:** backend/domain owners approve resource contracts, ownership, error format, versioning and data allowlists.
 2. **Environment and security design:** confirm development API origins, CORS, secrets handling, session mechanism, cookie/token policy and route protection. Do not commit secrets.
 3. **Public read-only discovery:** connect published listing/category/service/provider projections; preserve public access and remove/clearly isolate demo fixtures.
-4. **Identity context:** integrate the approved shared authentication/session client and actor context; no parallel Marketplace auth system.
+4. **Identity context:** Phase 1 shared authentication/session client is now integrated on the Marketplace development branch through the same-origin BFF; complete live browser/session validation, then integrate action-specific actor and organization authority only after its policy is approved.
 5. **Organisation authority:** integrate organisation context and action-specific delegated authority outcomes.
 6. **Listing management:** add authorized listing commands with server-side validation, audit and publication safeguards.
 7. **Enquiries and offers:** implement participant-scoped commands and state transitions.
@@ -230,7 +230,7 @@ Acceptance checks for the future integration:
 
 The following require explicit agreement from the relevant platform owners:
 - canonical API base URL(s), endpoint paths and versioning;
-- shared authentication/session client and sign-in/sign-out behavior;
+- action-specific actor, organization representation and delegated-authority response contracts (the shared Phase 1 authentication/session client and sign-in/sign-out code are already integrated; live validation remains outstanding);
 - actor, organisation and delegated-authority response contracts;
 - exact permission matrix for listing, enquiry, offer and transaction actions;
 - public listing field/media allowlist and location precision;
@@ -241,4 +241,27 @@ The following require explicit agreement from the relevant platform owners:
 - evidence storage, access, audit and retention policy;
 - legal/compliance approval for any escrow, custody of funds or regulated settlement service.
 
-**Implementation gate:** until these decisions are approved and a separate integration task is authorized, the Marketplace remains a frontend-only experience with demonstration content. This document is preparation, not a claim of completed integration.
+**Implementation gate:** Phase 1 shared authentication is implemented on `development/architecture-alignment` by Marketplace PR [#15](https://github.com/hlestakovjames/assetpass-marketplace/pull/15), using the backend identity contract through the same-origin BFF. The Vercel preview build for merge commit `d63e42470a93feb87d8651c2f3400a272841cfda` passed. The App and Marketplace integration branches remain separate from production `main`; this is not a production deployment or proof of live browser login. Live verification requires the exact Vercel `ASSET_PASS_BACKEND_ORIGIN`, `ASSET_PASS_PUBLIC_ORIGIN` and `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN` values, plus backend `TRUSTED_ORIGINS` containing both exact App and Marketplace origins. The backend uses a trusted request Origin for password-reset email return links; otherwise it falls back to canonical `APP_ORIGIN`. Email delivery, cookie/CSRF behavior, refresh rotation, logout, password recovery and approval gating must be verified from both browser origins before Milestone 1. Marketplace listing, transaction, payment, agreement, fulfilment, organization representation and canonical asset integrations remain separate future work.
+
+
+## 11. Phase 1 shared authentication integration status
+
+Marketplace PR [#15](https://github.com/hlestakovjames/assetpass-marketplace/pull/15) merged into `development/architecture-alignment` at `d63e42470a93feb87d8651c2f3400a272841cfda`. The corresponding Vercel preview build passed. The App integration PR [#26](https://github.com/hlestakovjames/assetpass-app/pull/26) also merged into its development integration branch and its Vercel preview build passed. Backend password recovery and DBR-06 membership history are integrated on backend development; GitHub Actions passed 179 unit tests, 35 HTTP E2E tests and PostgreSQL migration/guard validation. The backend Vercel check is currently blocked by the account's build-rate-limit restriction.
+
+### Shared identity behavior
+
+- Marketplace `/account/sign-in`, `/account/forgot-password`, `/reset-password`, `/account` and `/account/security` use the central AssetPass backend through the same-origin `/api/v1/*` BFF.
+- Access tokens remain in memory; refresh credentials use host-only HttpOnly cookies and CSRF protection. The App and Marketplace do not share browser cookies across origins; each has its own same-origin BFF session for the same central identity.
+- Marketplace registration redirects to the canonical App registration journey. Marketplace does not maintain a duplicate registration system.
+- The backend's existing eligibility rules apply equally to both origins: internal account approval is required; email verification remains non-blocking for early launch.
+- Password-reset email return links use the request Origin only when it exactly matches backend `TRUSTED_ORIGINS`; otherwise the backend uses canonical `APP_ORIGIN`.
+- Login does not establish Marketplace participant entitlement, seller authority, buyer authority or organization representation. Those are separate policy and authorization decisions.
+
+### Deployment configuration and acceptance still pending
+
+- Marketplace Vercel: `ASSET_PASS_BACKEND_ORIGIN`, `ASSET_PASS_PUBLIC_ORIGIN`, `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN`.
+- App Vercel: `ASSET_PASS_BACKEND_ORIGIN`, `ASSET_PASS_PUBLIC_ORIGIN`.
+- Backend Vercel: `APP_ORIGIN` should be the canonical App origin; `TRUSTED_ORIGINS` must contain the exact App and Marketplace origins. Production origins must be HTTPS. Never hardcode the not-yet-selected custom domain.
+- Run browser-level login, session restoration, refresh rotation, logout/logout-all, CSRF rejection, forgot/reset password email delivery and account approval gating from both origins. Verify the reset link returns to the origin that requested it.
+
+The code is integrated only on development branches at this stage. No production environment variables, migrations or deployments have been changed.
