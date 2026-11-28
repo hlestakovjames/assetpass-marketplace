@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { MarketplaceBrand } from "@/components/marketplace/marketplace-brand";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 
 type InfoSection = {
@@ -29,7 +28,10 @@ export function InfoPage({
     <main className="min-h-screen bg-[var(--surface)]">
       <header className="border-b border-white/10 bg-[var(--navy-deep)] text-white">
         <div className="site-container flex h-[72px] items-center justify-between gap-4">
-          <MarketplaceBrand />
+          <Link href="/" className="flex items-center gap-3" aria-label="AssetPass Marketplace home">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--teal)] text-lg font-black">A</span>
+            <span className="leading-tight"><span className="block text-base font-extrabold">AssetPass</span><span className="block text-[9px] font-bold uppercase tracking-[.2em] text-teal-300">Marketplace</span></span>
+          </Link>
           <Link href="/" className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 transition hover:text-white"><ArrowLeft size={15}/> Back to Marketplace</Link>
         </div>
       </header>
