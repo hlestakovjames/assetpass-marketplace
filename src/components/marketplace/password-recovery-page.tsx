@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
 import { requestPasswordReset, resetPassword } from "@/features/authentication/auth-client";
 
@@ -49,7 +49,7 @@ export function ForgotPasswordForm() {
 }
 
 export function ResetPasswordForm() {
-  const [token, setToken] = useState("");
+  const tokenRef = useRef<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -59,7 +59,7 @@ export function ResetPasswordForm() {
   useEffect(() => {
     const fragment = window.location.hash.slice(1);
     if (fragment) {
-      setToken(fragment);
+      tokenRef.current = fragment;
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
   }, []);
@@ -68,6 +68,7 @@ export function ResetPasswordForm() {
     event.preventDefault();
     setMessage("");
     setError("");
+    const token = tokenRef.current;
     if (!token) {
       setError("This reset link is missing its one-time token. Request a new link.");
       return;
@@ -83,7 +84,7 @@ export function ResetPasswordForm() {
     setSubmitting(true);
     try {
       await resetPassword(token, newPassword);
-      setToken("");
+      tokenRef.current = null;
       setNewPassword("");
       setConfirmPassword("");
       setMessage("Your password has been reset. All existing sessions have been signed out. You can now sign in with your new password.");
@@ -113,7 +114,7 @@ export function ResetPasswordForm() {
           </div>
           {message && <p role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs leading-5 text-emerald-900">{message}</p>}
           {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs leading-5 text-rose-800">{error}</p>}
-          {message ? <Link href="/account/sign-in" className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--teal)] px-5 py-3 text-sm font-bold text-white">Continue to sign in</Link> : <button type="submit" disabled={submitting || !token} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--teal)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--teal-dark)] disabled:opacity-60">{submitting ? "Updating…" : "Reset password"} <ArrowRight size={16}/></button>}
+          {message ? <Link href="/account/sign-in" className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--teal)] px-5 py-3 text-sm font-bold text-white">Continue to sign in</Link> : <button type="submit" disabled={submitting} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--teal)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--teal-dark)] disabled:opacity-60">{submitting ? "Updating…" : "Reset password"} <ArrowRight size={16}/></button>}
         </form>
       </section>
     </main>
