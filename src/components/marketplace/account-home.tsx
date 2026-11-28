@@ -39,7 +39,7 @@ export function AccountHome() {
             <div>
               <p className="eyebrow">AssetPass account</p>
               <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--navy)]">Welcome, {user.fullName}</h1>
-              <p className="muted mt-2 text-sm">You are signed in to AssetPass Marketplace.</p>
+              <p className="muted mt-2 text-sm">Your central AssetPass identity is authenticated. Marketplace participation and organisation representation are checked separately.</p>
             </div>
             <span className="inline-flex items-center gap-2 rounded-full bg-[#eaf7f3] px-3 py-2 text-xs font-bold text-[var(--teal-dark)]"><ShieldCheck size={15}/> Authenticated</span>
           </div>
