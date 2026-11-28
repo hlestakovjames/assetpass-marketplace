@@ -67,7 +67,7 @@ export function AccountHome() {
 
   if (!user) return null;
 
-  const appOrigin = (process.env.NEXT_PUBLIC_ASSETPASS_APP_ORIGIN || "https://assetpass-app.vercel.app").replace(/\\/$/, "");
+  const appOrigin = (process.env.NEXT_PUBLIC_ASSETPASS_APP_ORIGIN || "https://assetpass-app.vercel.app").replace(/\/$/, "");
   const appActive = user.applicationEntitlements?.assetpassApp.active === true;
   const marketplaceActive = user.applicationEntitlements?.marketplace.active === true;
 
