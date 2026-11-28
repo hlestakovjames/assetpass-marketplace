@@ -69,3 +69,10 @@ The frontend/backend boundary, domain ownership, public/private data rules, iden
 ## Deployment
 
 For each deployment, configure server-only `ASSET_PASS_BACKEND_ORIGIN` (HTTPS backend origin in production) and `ASSET_PASS_PUBLIC_ORIGIN` (the exact Marketplace origin), plus `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN` for the canonical registration link. The backend `APP_ORIGIN` should remain the canonical App origin, while backend `TRUSTED_ORIGINS` must include both the exact App and Marketplace origins. Password-reset requests forward the Marketplace `Origin`; the backend uses it only when it exactly matches a trusted origin, so the reset email returns to the correct host. Configure these values in the Vercel environment for the intended deployment; missing production BFF origins intentionally return 503. Do not hardcode a future custom domain.
+## Phase 1 participant entitlement controls — in development
+
+Draft integration: [PR #17](https://github.com/hlestakovjames/assetpass-marketplace/pull/17), dependent on backend [PR #25](https://github.com/hlestakovjames/assetpass-backend/pull/25).
+
+The authenticated Marketplace account page distinguishes successful central AssetPass authentication from individual Marketplace participant entitlement. It offers an explicit opt-in acknowledgement and a separate opt-out action, and displays current organisation representation grants independently. Public discovery remains accessible without authentication. Client state is presentation only; participant and represented-organisation authorization remain backend-enforced.
+
+Marketplace typecheck, lint, build and Vercel preview checks passed for the current feature branch. The capability is not yet merged to the shared integration branch or deployed as an enabled production feature.
