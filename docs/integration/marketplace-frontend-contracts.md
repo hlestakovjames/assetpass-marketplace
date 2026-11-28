@@ -1,6 +1,6 @@
 # Marketplace frontend integration preparation
 
-**Status:** preparation only — no integration is authorized or implemented by this document.
+**Status:** Phase 1 shared-authentication integration is authorized and in progress; Marketplace domain/data integration remains preparation only.
 
 This document defines the proposed boundary between the standalone AssetPass Marketplace frontend and the wider AssetPass platform. It is a contract proposal for review with the owning backend/domain teams. It does not assert that any endpoint, schema, permission, event, or service currently exists.
 
@@ -9,7 +9,7 @@ This document defines the proposed boundary between the standalone AssetPass Mar
 In scope:
 - frontend/backend responsibility boundaries;
 - public and protected route expectations;
-- identity and organisation participation context;
+- shared identity, authentication/session integration and organisation participation context;
 - authorization and delegated seller authority;
 - listing, enquiry, offer, transaction, payment, agreement, fulfilment and transfer boundaries;
 - public-data and media exposure rules;
@@ -17,8 +17,7 @@ In scope:
 - proposed integration sequence and acceptance checks.
 
 Out of scope:
-- API calls, endpoint implementation or backend changes;
-- shared authentication/session wiring;
+- Marketplace domain API implementation or backend changes beyond the approved Phase 1 shared-authentication boundary;
 - database access or schema migrations;
 - live listing creation, verification, moderation or publication;
 - enquiries, offers, transactions or payment processing;
@@ -61,6 +60,22 @@ Public pages must not require an account merely to discover available content.
 Authentication may be required for actions such as submitting an enquiry, making an offer, managing a listing, or viewing private transaction information. The exact action-to-permission matrix must be agreed with backend and governance owners before wiring controls.
 
 An authenticated person does not need to activate a separate Individual Workspace merely to participate in permitted Marketplace actions. Workspace navigation is not an authorization grant.
+
+
+### Phase 1 — shared authentication integration
+
+The Marketplace sign-in experience must authenticate against the same AssetPass backend identity service used by the authenticated App. It must not create a separate Marketplace user table, password store or independent credential system.
+
+- Public Marketplace discovery remains available without signing in.
+- Protected participant actions require a valid authenticated session and the relevant Marketplace entitlement/permission.
+- Marketplace sign-in uses the shared backend login, CSRF bootstrap, refresh, logout and current-identity contracts.
+- Marketplace registration links to the canonical AssetPass App registration journey. Do not maintain a reduced duplicate registration form in Marketplace.
+- The Marketplace Next.js server exposes a same-origin BFF proxy for the approved `/api/v1/*` backend contract. The BFF validates the exact public origin and forwards it to the backend trusted-origin guard.
+- Refresh cookies remain host-only, HttpOnly, Secure in production, SameSite=Lax and scoped to the auth path. The App and Marketplace have independent session families for the same central identity; this does not claim cross-application single sign-on.
+- Access tokens remain in memory. Refresh tokens are never written to browser storage.
+- Password recovery and signed-in password change use the shared backend account-security service and cannot bypass account approval/status.
+
+The detailed BFF, cookie, CSRF, session and environment contract is maintained in the [Shared Browser Authentication Architecture](https://github.com/hlestakovjames/assetpass-docs/blob/development/architecture-alignment/identity/shared-browser-authentication-architecture.md).
 
 ### Organisation context
 
