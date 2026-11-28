@@ -40,13 +40,13 @@ npm run build
 - Shared identity account routes: `/account/sign-in`, `/account/register`, `/account`, `/account/security`, `/account/forgot-password` and `/reset-password`.
 - Information pages: `/about`, `/help`, `/terms` and `/privacy`.
 
-Marketplace sign-in and session restoration now use the shared AssetPass backend identity contract through the same-origin BFF. The authenticated Marketplace account uses its own host-only session for the same central AssetPass identity. Registration redirects to the canonical AssetPass App registration journey; Marketplace does not maintain a reduced duplicate registration form. Public discovery remains available without signing in. Forgot-password, reset-password and signed-in password-change UI are present and are being validated against the shared backend implementation.
+Marketplace sign-in, session restoration, refresh, logout, password recovery and signed-in password change are implemented against the shared AssetPass backend identity contract through the same-origin BFF on `development/architecture-alignment` (PR #15). The Marketplace account uses its own host-only browser session for the same central AssetPass identity; it does not share cookies with the App origin. Registration redirects to the canonical AssetPass App registration journey; Marketplace does not maintain a reduced duplicate registration form. Public discovery remains available without signing in. The merged Marketplace authentication commit passed its Vercel preview build. Live browser validation against the deployed backend remains pending exact Vercel origin configuration, backend `TRUSTED_ORIGINS` configuration and end-to-end session/email checks.
 
 The About and Help Centre pages describe the product's current purpose and preview status. Terms and Privacy are explicitly interim informational pages, not final legally reviewed documents. Final legal terms, privacy disclosures, data-controller contact details and operational support processes must be approved before live services or personal-data processing begin.
 
 ## Important implementation boundaries
 
-This is a frontend foundation with Phase 1 shared authentication integration in progress. Marketplace listing, transaction, payment, agreement, fulfilment and canonical asset integrations remain unimplemented.
+This is a frontend foundation with Phase 1 shared authentication code integrated on the development branch. Marketplace listing, transaction, payment, agreement, fulfilment and canonical asset integrations remain unimplemented and belong to later approved phases.
 
 - Marketplace owns listing presentation and, in the target architecture, listing lifecycle, discovery, enquiries, offers and transaction coordination.
 - The Asset domain remains authoritative for canonical asset identity, legal ownership, custody and lifecycle.
@@ -68,4 +68,4 @@ The frontend/backend boundary, domain ownership, public/private data rules, iden
 
 ## Deployment
 
-For each deployment, configure server-only `ASSET_PASS_BACKEND_ORIGIN` and `ASSET_PASS_PUBLIC_ORIGIN`, plus `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN` for the canonical registration link. The backend `TRUSTED_ORIGINS` must include the exact Marketplace origin. Do not hardcode a future custom domain.
+For each deployment, configure server-only `ASSET_PASS_BACKEND_ORIGIN` (HTTPS backend origin in production) and `ASSET_PASS_PUBLIC_ORIGIN` (the exact Marketplace origin), plus `NEXT_PUBLIC_ASSETPASS_APP_ORIGIN` for the canonical registration link. The backend `APP_ORIGIN` should remain the canonical App origin, while backend `TRUSTED_ORIGINS` must include both the exact App and Marketplace origins. Password-reset requests forward the Marketplace `Origin`; the backend uses it only when it exactly matches a trusted origin, so the reset email returns to the correct host. Configure these values in the Vercel environment for the intended deployment; missing production BFF origins intentionally return 503. Do not hardcode a future custom domain.
