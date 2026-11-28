@@ -67,6 +67,10 @@ export function AccountHome() {
 
   if (!user) return null;
 
+  const appOrigin = (process.env.NEXT_PUBLIC_ASSETPASS_APP_ORIGIN || "https://assetpass-app.vercel.app").replace(/\\/$/, "");
+  const appActive = user.applicationEntitlements?.assetpassApp.active === true;
+  const marketplaceActive = user.applicationEntitlements?.marketplace.active === true;
+
   return (
     <main className="min-h-screen bg-[var(--surface)] px-5 py-12">
       <div className="mx-auto max-w-3xl">
@@ -154,6 +158,30 @@ export function AccountHome() {
             )}
           </section>
 
+          {marketplaceActive && (
+            <section className="mt-7 rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-base font-bold text-[var(--navy)]">AssetPass App access</h2>
+                  <p className="muted mt-1 max-w-xl text-sm leading-6">
+                    App access is a separate entitlement. Enabling it uses your existing central identity and asks you to confirm the personal details required by the App.
+                  </p>
+                </div>
+                <span className={appActive ? "rounded-full bg-[#eaf7f3] px-3 py-1 text-xs font-bold text-[var(--teal-dark)]" : "rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600"}>
+                  {appActive ? "Enabled" : "Not enabled"}
+                </span>
+              </div>
+              <a
+                href={`${appOrigin}${appActive ? "/account" : "/account/activate-app"}` }
+                className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[var(--teal)] px-5 text-sm font-bold text-white hover:bg-[var(--teal-dark)]"
+              >
+                {appActive ? "Open AssetPass App" : "Enable AssetPass App"} <ArrowRight size={15}/>
+              </a>
+              <p className="muted mt-3 text-xs leading-5">
+                App and Marketplace use separate browser sessions. You may be asked to sign in again on the App using this same AssetPass account. Marketplace credentials are never transferred between the applications.
+              </p>
+            </section>
+          )}
           <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6">
             <Link href="/" className="text-sm font-semibold text-[var(--teal-dark)] hover:underline">Continue exploring Marketplace</Link>
             <button onClick={() => void handleLogout()} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-rose-200 px-4 text-sm font-semibold text-rose-700 hover:bg-rose-50"><LogOut size={15}/> Sign out</button>
