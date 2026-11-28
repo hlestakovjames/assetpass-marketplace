@@ -1,27 +1,46 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, Building2, CheckCircle2, ShieldCheck, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { useAuth } from "@/features/authentication/auth-provider";
 
-type AccountMode = "sign-in" | "register";
+export function AccountPage({ mode }: { mode: "sign-in" | "register" }) {
+  const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-export function AccountPage({ mode }: { mode: AccountMode }) {
-  const isRegister = mode === "register";
-  const [notice, setNotice] = useState("");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (isRegister) {
-      const formData = new FormData(event.currentTarget);
-      if (formData.get("password") !== formData.get("confirmPassword")) {
-        setNotice("The passwords do not match. Please check both password fields.");
-        return;
-      }
-    }
-    setNotice(
-      "Account services are not connected yet. This is a frontend preview; your details have not been sent, saved or processed."
+  if (mode === "register") {
+    return (
+      <main className="grid min-h-screen place-items-center bg-[var(--surface)] px-5 py-12">
+        <section className="w-full max-w-lg rounded-3xl border border-[var(--line)] bg-white p-8 shadow-sm">
+          <p className="eyebrow">AssetPass account</p>
+          <h1 className="mt-3 text-2xl font-extrabold text-[var(--navy)]">Create your AssetPass identity</h1>
+          <p className="muted mt-3 text-sm leading-6">Registration is managed through the authenticated AssetPass application so that individual and organisation onboarding use one complete, consistent process.</p>
+          <a href={process.env.NEXT_PUBLIC_ASSETPASS_APP_ORIGIN ? `${process.env.NEXT_PUBLIC_ASSETPASS_APP_ORIGIN.replace(/\/$/, "")}/register` : "https://assetpass-app.vercel.app/register"} className="mt-7 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--teal)] px-5 py-3 text-sm font-bold text-white hover:bg-[var(--teal-dark)]">Continue to AssetPass registration <ArrowRight size={16}/></a>
+          <Link href="/account/sign-in" className="mt-5 block text-center text-sm font-semibold text-[var(--muted)] hover:text-[var(--navy)]">Already registered? Sign in</Link>
+        </section>
+      </main>
     );
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+    setSubmitting(true);
+    try {
+      await login(email.trim(), password);
+      router.replace("/account");
+      router.refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to sign in. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -48,49 +67,28 @@ export function AccountPage({ mode }: { mode: AccountMode }) {
             <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--muted)] transition hover:text-[var(--navy)]"><ArrowLeft size={16}/> Back to Marketplace</Link>
             <div className="mt-10 lg:mt-8">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e4f5f1] text-[var(--teal-dark)]"><ShieldCheck size={23}/></div>
-              <p className="eyebrow mt-7">{isRegister ? "Join the Marketplace" : "Welcome back"}</p>
-              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--navy)]">{isRegister ? "Create your account" : "Sign in to your account"}</h2>
-              <p className="muted mt-3 text-sm leading-6">{isRegister ? "Choose how you expect to participate. You can explore the Marketplace before creating an account." : "Sign-in screens are ready for the future account service connection."}</p>
+              <p className="eyebrow mt-7">Welcome back</p>
+              <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--navy)]">Sign in to AssetPass</h2>
+              <p className="muted mt-3 text-sm leading-6">Use the same AssetPass account you use in the authenticated application. Marketplace access and organisation authority are checked separately.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-              {isRegister && (
-                <>
-                  <div>
-                    <label htmlFor="fullName" className="mb-2 block text-xs font-bold text-[var(--ink)]">Full name</label>
-                    <input id="fullName" name="fullName" autoComplete="name" required placeholder="Enter your full name" className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
-                  </div>
-                  <fieldset>
-                    <legend className="mb-2 block text-xs font-bold text-[var(--ink)]">How will you participate?</legend>
-                    <div className="grid grid-cols-2 gap-3">
-                      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--line)] bg-white p-3.5 text-sm font-semibold text-[var(--ink)] has-[:checked]:border-[var(--teal)] has-[:checked]:bg-[#effaf7]"><input type="radio" name="capacity" value="individual" defaultChecked className="accent-[var(--teal)]"/><UserRound size={17}/> Individual</label>
-                      <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--line)] bg-white p-3.5 text-sm font-semibold text-[var(--ink)] has-[:checked]:border-[var(--teal)] has-[:checked]:bg-[#effaf7]"><input type="radio" name="capacity" value="organisation" className="accent-[var(--teal)]"/><Building2 size={17}/> Organisation</label>
-                    </div>
-                    <p className="muted mt-2 text-[11px] leading-5">Organisation participation will require appropriate authority checks when those workflows are introduced.</p>
-                  </fieldset>
-                </>
-              )}
               <div>
                 <label htmlFor="email" className="mb-2 block text-xs font-bold text-[var(--ink)]">Email address</label>
-                <input id="email" name="email" type="email" autoComplete="email" required placeholder="you@example.com" className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
+                <input id="email" name="email" type="email" autoComplete="username" required maxLength={320} value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
               </div>
               <div>
                 <label htmlFor="password" className="mb-2 block text-xs font-bold text-[var(--ink)]">Password</label>
-                <input id="password" name="password" type="password" autoComplete={isRegister ? "new-password" : "current-password"} minLength={8} required placeholder={isRegister ? "At least 8 characters" : "Enter your password"} className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
+                <input id="password" name="password" type="password" autoComplete="current-password" required maxLength={1024} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Enter your password" className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
               </div>
-              {isRegister && (
-                <div>
-                  <label htmlFor="confirmPassword" className="mb-2 block text-xs font-bold text-[var(--ink)]">Confirm password</label>
-                  <input id="confirmPassword" name="confirmPassword" type="password" autoComplete="new-password" minLength={8} required placeholder="Re-enter your password" className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-teal-500/10"/>
-                </div>
-              )}
-              {!isRegister && <div className="flex justify-end"><span className="text-xs font-semibold text-[var(--muted)]">Password recovery will be available with account services.</span></div>}
-              <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--teal)] px-5 py-4 text-sm font-bold text-white transition hover:bg-[var(--teal-dark)]">{isRegister ? "Create account" : "Sign in"} <ArrowRight size={16}/></button>
-              {notice && <p role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950">{notice}</p>}
+              <div className="flex justify-end">
+                <Link href="/account/forgot-password" className="text-xs font-semibold text-[var(--teal-dark)] hover:underline">Forgot password?</Link>
+              </div>
+              {error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs leading-5 text-rose-800">{error}</p>}
+              <button type="submit" disabled={submitting} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--teal)] px-5 py-4 text-sm font-bold text-white transition hover:bg-[var(--teal-dark)] disabled:cursor-not-allowed disabled:opacity-60">{submitting ? "Signing in…" : "Sign in"} <ArrowRight size={16}/></button>
             </form>
 
-            <p className="muted mt-7 text-center text-sm">{isRegister ? "Already have an account?" : "New to AssetPass Marketplace?"}{" "}<Link href={isRegister ? "/account/sign-in" : "/account/register"} className="font-bold text-[var(--teal-dark)] hover:underline">{isRegister ? "Sign in" : "Join Marketplace"}</Link></p>
-            <p className="muted mt-8 text-center text-[11px] leading-5">Account creation and sign-in are not active yet. You can continue browsing public Marketplace information without an account.</p>
+            <p className="muted mt-7 text-center text-sm">New to AssetPass? <Link href="/account/register" className="font-bold text-[var(--teal-dark)] hover:underline">Create an account</Link></p>
           </div>
         </section>
       </div>
