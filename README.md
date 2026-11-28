@@ -37,10 +37,10 @@ npm run build
 - Service directory/details and provider directory/profiles.
 - Participation overview, individual and organisation pathways, and getting-started guide.
 - Trust guidance for listing statuses, seller authority and reporting.
-- Account entry screens: `/account/sign-in` and `/account/register`.
+- Shared identity account routes: `/account/sign-in`, `/account/register`, `/account`, `/account/security`, `/account/forgot-password` and `/reset-password`.
 - Information pages: `/about`, `/help`, `/terms` and `/privacy`.
 
-Marketplace sign-in is being connected to the shared AssetPass backend identity service through the same-origin BFF. The authenticated Marketplace account uses its own host-only session for the same central AssetPass identity. Registration is redirected to the canonical AssetPass App registration journey; Marketplace does not maintain a reduced duplicate registration form. Public discovery remains available without signing in. Password recovery and account-security actions are being integrated against the shared backend account-security contract.
+Marketplace sign-in and session restoration now use the shared AssetPass backend identity contract through the same-origin BFF. The authenticated Marketplace account uses its own host-only session for the same central AssetPass identity. Registration redirects to the canonical AssetPass App registration journey; Marketplace does not maintain a reduced duplicate registration form. Public discovery remains available without signing in. Forgot-password, reset-password and signed-in password-change UI are present and are being validated against the shared backend implementation.
 
 The About and Help Centre pages describe the product's current purpose and preview status. Terms and Privacy are explicitly interim informational pages, not final legally reviewed documents. Final legal terms, privacy disclosures, data-controller contact details and operational support processes must be approved before live services or personal-data processing begin.
 
