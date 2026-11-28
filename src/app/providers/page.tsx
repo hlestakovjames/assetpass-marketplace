@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, MapPin, Wrench } from "lucide-react";
 import { providers, sampleProviderNotice, serviceCategories } from "@/data/services";
 
 type SearchParams = Promise<{ q?: string; category?: string; region?: string }>;
